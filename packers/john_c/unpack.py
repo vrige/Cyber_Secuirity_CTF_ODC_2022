@@ -1,13 +1,9 @@
 '''
-gdb john
-b *0x0804928a
-run adfas
+# the original file is john, but I am going to modify it multiple times with the unpacked code.
+# in the following section I stored some useful data for dumping the memory
+# I decided to do it in multiple shots, because I wasn't sure about nested calls
+
 # this 0x0804928a is the address of the calling rountine 
-# notice that we need some arguments in input
-# notice that eax is the register with the value of the call -> in assembly: call eax
-x/50i $eax
-#now we want to dump the memory and use only the unpatched one
-dump binary memory first.bin $eax ($eax + 4 * 0x53)
 
 base_address = 0x08048000
 list of borders and offsets with the base_address of the binary:
