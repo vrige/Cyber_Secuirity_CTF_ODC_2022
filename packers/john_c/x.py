@@ -5,6 +5,17 @@ from angrcli.interaction.explore import ExploreInteractive
 
 # to pass the input to gdb you need to use:
 # gdb --args ./john $(perl -e 'print "flag{packer-AAAAAAAA&-annoying__}"')
+'''
+after dumping the memory, we can see that there are many checks on the input:
+- it should start with "flag{"
+- it should end with "}"
+- it should be printable
+- it should be long 33 chars
+- and other three checks on first, midlle and last part
+Notice that the reversing on the first part is quite easy, because you can discorver it by looking with gdb on the check.
+While the last part can be solved with a z3 solver and reversing the algorithm extraced from ghidra, by printing everything and checking which input make sense.
+The central part is the most difficult part, but given all the other part, it may be found with an angr solver.
+'''
 # the following breakpoints amy very useful:
 # b*0x0804928a   for the routine
 # b*0x08049683   for the central check 
