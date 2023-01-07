@@ -1,0 +1,15 @@
+notice that you can retrieve the php files thought a path traversal:
+- go to play and change color (there is a blue botton on the tile of the game)
+- then edit the url in this way:
+  http://1024.training.jinblack.it/?color=../viewer.php
+  here, you can inspect the element and on the style you will find the source code of viewer.php
+  there you will find the name of the page inngerGame.php
+  http://1024.training.jinblack.it/?color=../inngerGame.php	
+  Finally, in this page there is all the serialized classes
+- notice that you can load you game which is a serialized class
+- you can serialize a ranking object crafting it in a way that it will save the env.var. in a certain page
+- when the object ranking is destroyed then it creates everything
+- so load the file and just check if it is printed in the special page (the one specified in the craft)
+  just by inspecting the page 
+  http://1024.training.jinblack.it/?color=../games/hello3.php
+- Finally, if it is printed, go to  http://1024.training.jinblack.it/games/hello3.php

