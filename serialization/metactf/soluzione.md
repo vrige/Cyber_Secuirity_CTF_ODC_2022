@@ -6,6 +6,7 @@ In this way, it is possible to use __destruct() -> stop() -> exec()
 notice that the source code for the lasses is in data.php.
 However, with exec you can execute  linux command.
 The following code is the one used to serialized the object:
+```php
 <?php
 class Challenge{
 
@@ -24,7 +25,7 @@ $user = new Challenge("cane2","a");
 //print_r($user);
 echo serialize($user);
 ?> 
-
+```
 
 ## Challange
 Read the flag `flag.txt`. 
